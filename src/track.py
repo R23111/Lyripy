@@ -11,12 +11,17 @@ class Track:
     def print_info(self) -> str:
         return f"{self.__title} by {self.__artist} from {self.__album}"
 
-    def get_lyrics(self, mode=None):
+    def get_lyrics(self, mode=None) -> str:
         genius = lyricsgenius.Genius(GENIUS_CLIENT_ACCESS_TOKEN)
+        genius.response_format = "html"
         genius.verbose = False
         genius.remove_section_headers = True
+        genius_search = genius.search_song(title=self.__title, artist=self.__artist, get_full_info=False).lyrics
 
-        genius_search = genius.search_song(title=self.__title, artist=self.__artist, get_full_info=False)
 
         if(genius_search != None):
-            return genius_search.lyrics
+            f = open("lyrics.md", "w")
+            f.write(genius_search.replace("\n", "\n\n"))
+            f.close()
+            return genius_search
+        return ""

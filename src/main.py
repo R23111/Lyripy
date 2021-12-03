@@ -3,14 +3,17 @@ import spotipy
 from spotipy import util
 
 from track import Track
+from tui import Tui
 
 
 def main(): 
     spotify = spotipy.Spotify(auth=util.prompt_for_user_token("R23111", "user-read-playback-state", SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, 'http://localhost:8080'))
-
     track = Track(spotify.current_playback())
+    track.get_lyrics()
 
-    print(track.get_lyrics())
+    Tui.run(title=track.print_info())
+
+    
 
     
 
