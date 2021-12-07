@@ -1,36 +1,18 @@
-from rich.markdown import Markdown
+import os
 
-from textual import events
-from textual.app import App
-from textual.widgets import Header, Footer, Placeholder, ScrollView
-
-
-class Tui(App):
-
-
-    """An example of a very simple Textual App"""
-
-    async def on_load(self, event: events.Load) -> None:
-        """Bind keys with the app loads (but before entering application mode)"""
-        await self.bind("q", "quit", "Quit")
-
-    async def on_mount(self, event: events.Mount) -> None:
-        """Create and dock the widgets."""
-
-        # A scrollview to contain the markdown file
-        body = ScrollView(gutter=1)
-
-        # Header / footer / dock
-        await self.view.dock(Header(), edge="top")
-        await self.view.dock(Footer(), edge="bottom")
-
-        # Dock the body in the remaining space
-        await self.view.dock(body, edge="right")
-
-        async def get_markdown(filename: str) -> None:
-            with open(filename, "rt") as fh:
-                readme = Markdown(fh.read(), hyperlinks=True)
-            await body.update(readme)
-
-        await self.call_later(get_markdown, "lyrics.md")
-
+class Tui:
+    @staticmethod   
+    def print_lyrics(title: str, lyrics: str):
+        for i in range(3):
+            print()
+            if i == 1:
+                print(f"# {title} #", end='')
+            else:
+                for j in range(len(title)+4):
+                    print("#", end='')
+        print("\n\n")
+        print(lyrics)
+            
+    @staticmethod
+    def clear_term():
+        os.system('cls' if os.name == 'nt' else 'clear')
